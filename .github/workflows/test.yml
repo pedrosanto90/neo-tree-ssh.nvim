@@ -1,0 +1,42 @@
+name: test
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        nvim_version: [v0.10.0, stable, nightly]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: ${{ matrix.nvim_version }}
+
+      - name: Cache plugin deps
+        uses: actions/cache@v4
+        with:
+          path: ~/deps
+          key: ${{ runner.os }}-nvim-deps-v3
+
+      - name: Clone plugin deps
+        run: |
+          mkdir -p ~/deps
+          cd ~/deps
+          for dep in nvim-lua/plenary.nvim MunifTanjim/nui.nvim nvim-tree/nvim-web-devicons nvim-neo-tree/neo-tree.nvim nvim-telescope/telescope.nvim; do
+            name=$(basename "$dep")
+            if [ ! -d "$name" ]; then
+              git clone --depth 1 "https://github.com/$dep.git"
+            fi
+          done
+
+      - name: Run tests
+        run: |
+          ln -s ~/deps deps
+          NEOTREE_SSH_DEPS=$HOME/deps make test
