@@ -22,7 +22,7 @@ Telescope's file picker stays responsive on large repositories.
 
 ```lua
 {
-  "your-username/neotree-ssh",
+  "pedrosanto90/neo-tree-ssh",
   dependencies = {
     "nvim-neo-tree/neo-tree.nvim",
     "nvim-telescope/telescope.nvim",
@@ -48,7 +48,7 @@ You also need to register the source with `neo-tree`:
 
 ```lua
 require("neo-tree").setup({
-  sources = { "filesystem", "buffers", "git_status", "neotree-ssh.source" },
+  sources = { "filesystem", "buffers", "git_status", "neo-tree-ssh.source" },
 })
 ```
 
