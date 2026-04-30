@@ -50,6 +50,13 @@ end, {
   desc = "Telescope live_grep over a configured SSH host",
 })
 
+vim.api.nvim_create_user_command("NeotreeSshToggle", function()
+  require("neotree-ssh").toggle()
+end, {
+  nargs = 0,
+  desc = "Reopen the last SSH tree",
+})
+
 vim.api.nvim_create_user_command("NeotreeSshOpen", function(opts)
   local args = vim.split(opts.args, "%s+", { trimempty = true })
   local host = args[1]
